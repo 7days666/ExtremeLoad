@@ -179,11 +179,11 @@ class WinOptPage(QWidget):
         quick_btn_layout.addWidget(reset_net_btn)
         
         open_services_btn = PushButton("打开服务管理")
-        open_services_btn.clicked.connect(lambda: subprocess.Popen("services.msc"))
+        open_services_btn.clicked.connect(lambda: subprocess.Popen("services.msc", shell=True))
         quick_btn_layout.addWidget(open_services_btn)
         
         open_devmgmt_btn = PushButton("打开设备管理器")
-        open_devmgmt_btn.clicked.connect(lambda: subprocess.Popen("devmgmt.msc"))
+        open_devmgmt_btn.clicked.connect(lambda: subprocess.Popen("devmgmt.msc", shell=True))
         quick_btn_layout.addWidget(open_devmgmt_btn)
         
         quick_btn_layout.addStretch()
