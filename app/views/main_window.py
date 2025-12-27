@@ -10,6 +10,9 @@ from .reverse_page import ReversePage
 from .env_config_page import EnvConfigPage
 from .mirror_page import MirrorPage
 from .git_config_page import GitConfigPage
+from .hosts_page import HostsPage
+from .port_page import PortPage
+from .process_page import ProcessPage
 from .sysinfo_page import SysInfoPage
 from .settings_page import SettingsPage
 
@@ -57,6 +60,18 @@ class MainWindow(FluentWindow):
         # Git 配置页
         self.git_config_page = GitConfigPage(self)
         self.addSubInterface(self.git_config_page, FIF.GITHUB, "Git 配置")
+        
+        # Hosts 编辑器
+        self.hosts_page = HostsPage(self)
+        self.addSubInterface(self.hosts_page, FIF.GLOBE, "Hosts 编辑")
+        
+        # 端口查看
+        self.port_page = PortPage(self)
+        self.addSubInterface(self.port_page, FIF.WIFI, "端口占用")
+        
+        # 进程管理
+        self.process_page = ProcessPage(self)
+        self.addSubInterface(self.process_page, FIF.SPEED_HIGH, "进程管理")
         
         # 系统信息页
         self.sysinfo_page = SysInfoPage(self)
