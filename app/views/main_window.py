@@ -16,6 +16,11 @@ from .process_page import ProcessPage
 from .cleaner_page import CleanerPage
 from .devtools_page import DevToolsPage
 from .winopt_page import WinOptPage
+from .hash_page import HashPage
+from .encode_page import EncodePage
+from .qrcode_page import QRCodePage
+from .network_page import NetworkPage
+from .textdiff_page import TextDiffPage
 from .sysinfo_page import SysInfoPage
 from .settings_page import SettingsPage
 
@@ -87,6 +92,26 @@ class MainWindow(FluentWindow):
         # Windows 优化
         self.winopt_page = WinOptPage(self)
         self.addSubInterface(self.winopt_page, FIF.SPEED_OFF, "系统优化")
+        
+        # 文件哈希
+        self.hash_page = HashPage(self)
+        self.addSubInterface(self.hash_page, FIF.FINGERPRINT, "哈希计算")
+        
+        # 编码转换
+        self.encode_page = EncodePage(self)
+        self.addSubInterface(self.encode_page, FIF.LANGUAGE, "编码转换")
+        
+        # 二维码
+        self.qrcode_page = QRCodePage(self)
+        self.addSubInterface(self.qrcode_page, FIF.QRCODE, "二维码")
+        
+        # 网络工具
+        self.network_page = NetworkPage(self)
+        self.addSubInterface(self.network_page, FIF.CONNECT, "网络工具")
+        
+        # 文本对比
+        self.textdiff_page = TextDiffPage(self)
+        self.addSubInterface(self.textdiff_page, FIF.ALIGNMENT, "文本对比")
         
         # 系统信息页
         self.sysinfo_page = SysInfoPage(self)

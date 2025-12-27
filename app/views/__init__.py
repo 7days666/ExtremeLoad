@@ -13,5 +13,10 @@ from .process_page import ProcessPage
 from .cleaner_page import CleanerPage
 from .devtools_page import DevToolsPage
 from .winopt_page import WinOptPage
+from .hash_page import HashPage
+from .encode_page import EncodePage
+from .qrcode_page import QRCodePage
+from .network_page import NetworkPage
+from .textdiff_page import TextDiffPage
 from .sysinfo_page import SysInfoPage
 from .settings_page import SettingsPage
