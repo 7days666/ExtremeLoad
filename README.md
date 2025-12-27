@@ -25,6 +25,8 @@
 - Visual C++ 运行库 (2005-2022, x86/x64)
 - .NET Framework (4.0/4.5/4.8)
 - msvsmon 远程调试器
+- 一键下载全部 VC++ 运行库
+- 一键静默安装已下载
 
 ### ⚙️ 环境配置
 一键配置开发环境变量：
@@ -38,6 +40,12 @@
 - pip (清华源、阿里源、腾讯源)
 - Maven (阿里源、华为源)
 - Go Proxy (七牛源、阿里源)
+
+### 🔧 Git 配置
+- 用户信息配置 (user.name、user.email)
+- 代理配置 (http.proxy、https.proxy)
+- 常用配置 (autocrlf、credential.helper)
+- SSH 密钥生成
 
 ### 📊 系统信息
 - 操作系统信息

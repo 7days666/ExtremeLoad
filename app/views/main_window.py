@@ -8,6 +8,7 @@ from .ai_ide_page import AIIDEPage
 from .tools_page import ToolsPage
 from .env_config_page import EnvConfigPage
 from .mirror_page import MirrorPage
+from .git_config_page import GitConfigPage
 from .sysinfo_page import SysInfoPage
 from .settings_page import SettingsPage
 
@@ -47,6 +48,10 @@ class MainWindow(FluentWindow):
         # 镜像源切换页
         self.mirror_page = MirrorPage(self)
         self.addSubInterface(self.mirror_page, FIF.SYNC, "镜像源切换")
+        
+        # Git 配置页
+        self.git_config_page = GitConfigPage(self)
+        self.addSubInterface(self.git_config_page, FIF.GITHUB, "Git 配置")
         
         # 系统信息页
         self.sysinfo_page = SysInfoPage(self)

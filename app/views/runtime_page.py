@@ -329,6 +329,23 @@ class RuntimePage(QWidget):
         
         content_layout.addLayout(title_layout)
         
+        # 一键安装按钮
+        batch_card = CardWidget()
+        batch_layout = QHBoxLayout(batch_card)
+        batch_layout.setContentsMargins(20, 15, 20, 15)
+        batch_layout.addWidget(BodyLabel("快捷操作:"))
+        
+        self.batch_vc_btn = PrimaryPushButton("一键下载全部 VC++ 运行库")
+        self.batch_vc_btn.clicked.connect(self._batch_download_vc)
+        batch_layout.addWidget(self.batch_vc_btn)
+        
+        self.batch_install_btn = PushButton("一键静默安装已下载")
+        self.batch_install_btn.clicked.connect(self._batch_install)
+        batch_layout.addWidget(self.batch_install_btn)
+        
+        batch_layout.addStretch()
+        content_layout.addWidget(batch_card)
+        
         # 设置区域
         settings_card = CardWidget()
         settings_layout = QHBoxLayout(settings_card)
@@ -461,3 +478,34 @@ class RuntimePage(QWidget):
                 btn.setVisible(True)
             else:
                 btn.setVisible(False)
+    
+    def _batch_download_vc(self):
+        """一键下载全部 VC++ 运行库"""
+        count = 0
+        for btn in self.buttons:
+            if btn.info.get("category") == "vcredist" and not btn._is_downloading and not btn._is_downloaded:
+                btn._start_download()
+                count += 1
+        
+        if count > 0:
+            InfoBar.info("批量下载", f"已开始下载 {count} 个运行库", parent=self.window(), position=InfoBarPosition.TOP_RIGHT, duration=2000)
+        else:
+            InfoBar.info("提示", "没有需要下载的运行库", parent=self.window(), position=InfoBarPosition.TOP_RIGHT, duration=2000)
+    
+    def _batch_install(self):
+        """一键静默安装已下载的运行库"""
+        save_dir = self._get_save_dir()
+        installed = 0
+        
+        for btn in self.buttons:
+            if btn._is_downloaded and btn.current_save_path and os.path.exists(btn.current_save_path):
+                # 静默安装参数
+                filepath = btn.current_save_path
+                if filepath.endswith('.exe'):
+                    subprocess.Popen(f'"{filepath}" /quiet /norestart', shell=True)
+                    installed += 1
+        
+        if installed > 0:
+            InfoBar.success("批量安装", f"已启动 {installed} 个安装程序（静默模式）", parent=self.window(), position=InfoBarPosition.TOP_RIGHT, duration=3000)
+        else:
+            InfoBar.warning("提示", "没有已下载的运行库可安装", parent=self.window(), position=InfoBarPosition.TOP_RIGHT, duration=2000)

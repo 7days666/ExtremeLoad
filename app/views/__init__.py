@@ -5,5 +5,6 @@ from .ai_ide_page import AIIDEPage
 from .tools_page import ToolsPage
 from .env_config_page import EnvConfigPage
 from .mirror_page import MirrorPage
+from .git_config_page import GitConfigPage
 from .sysinfo_page import SysInfoPage
 from .settings_page import SettingsPage
