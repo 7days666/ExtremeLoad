@@ -13,6 +13,9 @@ from .git_config_page import GitConfigPage
 from .hosts_page import HostsPage
 from .port_page import PortPage
 from .process_page import ProcessPage
+from .cleaner_page import CleanerPage
+from .devtools_page import DevToolsPage
+from .winopt_page import WinOptPage
 from .sysinfo_page import SysInfoPage
 from .settings_page import SettingsPage
 
@@ -72,6 +75,18 @@ class MainWindow(FluentWindow):
         # 进程管理
         self.process_page = ProcessPage(self)
         self.addSubInterface(self.process_page, FIF.SPEED_HIGH, "进程管理")
+        
+        # 系统清理
+        self.cleaner_page = CleanerPage(self)
+        self.addSubInterface(self.cleaner_page, FIF.DELETE, "系统清理")
+        
+        # 开发工具
+        self.devtools_page = DevToolsPage(self)
+        self.addSubInterface(self.devtools_page, FIF.CODE, "开发工具")
+        
+        # Windows 优化
+        self.winopt_page = WinOptPage(self)
+        self.addSubInterface(self.winopt_page, FIF.SPEED_OFF, "系统优化")
         
         # 系统信息页
         self.sysinfo_page = SysInfoPage(self)

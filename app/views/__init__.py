@@ -10,5 +10,8 @@ from .git_config_page import GitConfigPage
 from .hosts_page import HostsPage
 from .port_page import PortPage
 from .process_page import ProcessPage
+from .cleaner_page import CleanerPage
+from .devtools_page import DevToolsPage
+from .winopt_page import WinOptPage
 from .sysinfo_page import SysInfoPage
 from .settings_page import SettingsPage
