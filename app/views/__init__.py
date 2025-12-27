@@ -1,1 +1,9 @@
-# Views
+from .main_window import MainWindow
+from .download_page import DownloadPage
+from .runtime_page import RuntimePage
+from .ai_ide_page import AIIDEPage
+from .tools_page import ToolsPage
+from .env_config_page import EnvConfigPage
+from .mirror_page import MirrorPage
+from .sysinfo_page import SysInfoPage
+from .settings_page import SettingsPage
