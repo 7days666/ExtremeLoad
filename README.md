@@ -119,7 +119,10 @@ python main.py
 
 ## 截图
 
-（待添加）
+![截图1](525b5bf74c5a4748d36e7dcddc8f841d.png)
+![截图2](9b28e2f0d7923b3b24512d2b217d1f23.png)
+![截图3](a8ccc16775cde057d89e18982d94611e.png)
+![截图4](cc2a3aed1efc2e26c810f39b6e8d751b.png)
 
 ## 许可证
 
