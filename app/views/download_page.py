@@ -1,16 +1,17 @@
 """IDE下载页面"""
-from PySide6.QtWidgets import (
+from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, 
     QFileDialog, QLabel
 )
-from PySide6.QtCore import Qt, QThread, Signal
+from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from qfluentwidgets import (
     CardWidget, PushButton, ProgressBar,
     TitleLabel, BodyLabel, InfoBar, InfoBarPosition,
-    ComboBox
+    FluentIcon as FIF, IconWidget, CheckBox, LineEdit
 )
 import requests
 import os
+import subprocess
 
 
 # 下载源配置
@@ -19,34 +20,34 @@ DOWNLOAD_SOURCES = {
         "name": "Visual Studio Code",
         "url": "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user",
         "filename": "VSCodeSetup.exe",
-        "icon": "💻"
+        "icon": FIF.CODE
     },
     "VS2022": {
         "name": "Visual Studio 2022 Community",
         "url": "https://aka.ms/vs/17/release/vs_community.exe",
         "filename": "vs_community.exe",
-        "icon": "🔮"
+        "icon": FIF.DEVELOPER_TOOLS
     },
     "Python": {
         "name": "Python 3.12",
         "url": "https://www.python.org/ftp/python/3.12.4/python-3.12.4-amd64.exe",
         "filename": "python-3.12.4-amd64.exe",
-        "icon": "🐍"
+        "icon": FIF.COMMAND_PROMPT
     },
     "Node": {
         "name": "Node.js LTS",
         "url": "https://npmmirror.com/mirrors/node/v20.18.0/node-v20.18.0-x64.msi",
         "filename": "node-v20.18.0-x64.msi",
-        "icon": "💚"
+        "icon": FIF.APPLICATION
     }
 }
 
 
 class DownloadThread(QThread):
     """下载线程"""
-    progress = Signal(int)
-    finished = Signal(bool, str)
-    speed = Signal(str)
+    progress = pyqtSignal(int)
+    finished = pyqtSignal(bool, str)
+    speed = pyqtSignal(str)
     
     def __init__(self, url, save_path):
         super().__init__()
@@ -73,7 +74,6 @@ class DownloadThread(QThread):
                         percent = int(downloaded * 100 / total_size)
                         self.progress.emit(percent)
                         
-                        # 计算速度
                         speed_mb = len(chunk) / 1024 / 1024
                         self.speed.emit(f"{speed_mb:.2f} MB/s")
             
@@ -88,12 +88,13 @@ class DownloadThread(QThread):
 class DownloadCard(CardWidget):
     """下载卡片"""
     
-    def __init__(self, key, info, parent=None):
+    def __init__(self, key, info, get_save_dir, get_auto_open, parent=None):
         super().__init__(parent)
         self.key = key
         self.info = info
+        self.get_save_dir = get_save_dir
+        self.get_auto_open = get_auto_open
         self.download_thread = None
-        self.save_dir = os.path.join(os.path.expanduser("~"), "Downloads")
         
         self._init_ui()
     
@@ -103,10 +104,13 @@ class DownloadCard(CardWidget):
         
         # 标题行
         title_layout = QHBoxLayout()
-        icon_label = QLabel(self.info["icon"])
-        icon_label.setStyleSheet("font-size: 32px;")
+        
+        icon_widget = IconWidget(self.info["icon"])
+        icon_widget.setFixedSize(32, 32)
         title_label = TitleLabel(self.info["name"])
-        title_layout.addWidget(icon_label)
+        
+        title_layout.addWidget(icon_widget)
+        title_layout.addSpacing(10)
         title_layout.addWidget(title_label)
         title_layout.addStretch()
         
@@ -131,7 +135,11 @@ class DownloadCard(CardWidget):
     
     def _start_download(self):
         """开始下载"""
-        save_path = os.path.join(self.save_dir, self.info["filename"])
+        save_dir = self.get_save_dir()
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        
+        save_path = os.path.join(save_dir, self.info["filename"])
         
         self.download_btn.setEnabled(False)
         self.download_btn.setText("下载中...")
@@ -157,16 +165,20 @@ class DownloadCard(CardWidget):
         self.download_btn.setText("下载")
         
         if success:
-            self.status_label.setText(f"✅ 下载完成: {message}")
+            self.status_label.setText(f"下载完成: {self.info['filename']}")
             InfoBar.success(
                 title="下载完成",
-                content=f"{self.info['name']} 已保存到 Downloads 文件夹",
+                content=f"{self.info['name']} 已保存",
                 parent=self.window(),
                 position=InfoBarPosition.TOP_RIGHT,
                 duration=3000
             )
+            # 自动打开目录
+            if self.get_auto_open():
+                folder = os.path.dirname(message)
+                subprocess.Popen(f'explorer "{folder}"')
         else:
-            self.status_label.setText(f"❌ 下载失败: {message}")
+            self.status_label.setText(f"下载失败: {message}")
             self.progress_bar.setVisible(False)
 
 
@@ -176,6 +188,7 @@ class DownloadPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setObjectName("downloadPage")
+        self.save_dir = os.path.join(os.path.expanduser("~"), "Downloads")
         self._init_ui()
     
     def _init_ui(self):
@@ -184,15 +197,77 @@ class DownloadPage(QWidget):
         layout.setSpacing(15)
         
         # 页面标题
-        title = TitleLabel("📥 IDE 下载区")
-        layout.addWidget(title)
+        title_layout = QHBoxLayout()
+        title_icon = IconWidget(FIF.DOWNLOAD)
+        title_icon.setFixedSize(28, 28)
+        title = TitleLabel("IDE 下载区")
+        title_layout.addWidget(title_icon)
+        title_layout.addSpacing(8)
+        title_layout.addWidget(title)
+        title_layout.addStretch()
+        layout.addLayout(title_layout)
         
-        desc = BodyLabel("点击下载按钮，自动下载到 Downloads 文件夹")
+        desc = BodyLabel("点击下载按钮，自动下载到指定文件夹")
         layout.addWidget(desc)
+        
+        # 设置区域
+        settings_card = CardWidget(self)
+        settings_layout = QVBoxLayout(settings_card)
+        settings_layout.setContentsMargins(20, 15, 20, 15)
+        
+        # 保存路径
+        path_layout = QHBoxLayout()
+        path_label = BodyLabel("保存位置:")
+        self.path_edit = LineEdit()
+        self.path_edit.setText(self.save_dir)
+        self.path_edit.setReadOnly(True)
+        
+        browse_btn = PushButton("浏览")
+        browse_btn.clicked.connect(self._browse_folder)
+        
+        open_btn = PushButton("打开目录")
+        open_btn.clicked.connect(self._open_folder)
+        
+        path_layout.addWidget(path_label)
+        path_layout.addWidget(self.path_edit, 1)
+        path_layout.addWidget(browse_btn)
+        path_layout.addWidget(open_btn)
+        settings_layout.addLayout(path_layout)
+        
+        # 自动打开选项
+        self.auto_open_checkbox = CheckBox("下载完成后自动打开目录")
+        self.auto_open_checkbox.setChecked(True)
+        settings_layout.addWidget(self.auto_open_checkbox)
+        
+        layout.addWidget(settings_card)
         
         # 下载卡片
         for key, info in DOWNLOAD_SOURCES.items():
-            card = DownloadCard(key, info, self)
+            card = DownloadCard(key, info, self._get_save_dir, self._get_auto_open, self)
             layout.addWidget(card)
         
         layout.addStretch()
+    
+    def _get_save_dir(self):
+        return self.path_edit.text()
+    
+    def _get_auto_open(self):
+        return self.auto_open_checkbox.isChecked()
+    
+    def _browse_folder(self):
+        folder = QFileDialog.getExistingDirectory(self, "选择保存目录", self.save_dir)
+        if folder:
+            self.path_edit.setText(folder)
+    
+    def _open_folder(self):
+        folder = self.path_edit.text()
+        if os.path.exists(folder):
+            subprocess.Popen(f'explorer "{folder}"')
+        else:
+            InfoBar.warning(
+                title="目录不存在",
+                content="请先选择有效的保存目录",
+                parent=self.window(),
+                position=InfoBarPosition.TOP_RIGHT,
+                duration=2000
+            )

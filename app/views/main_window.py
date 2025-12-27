@@ -1,10 +1,7 @@
 """主窗口"""
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from PySide6.QtCore import Qt
-from qfluentwidgets import (
-    FluentWindow, NavigationItemPosition, 
-    setTheme, Theme
-)
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QDesktopWidget
+from PyQt5.QtCore import Qt
+from qfluentwidgets import FluentWindow, NavigationItemPosition
 from qfluentwidgets import FluentIcon as FIF
 from .download_page import DownloadPage
 
@@ -32,7 +29,7 @@ class MainWindow(FluentWindow):
     
     def _center_window(self):
         """窗口居中"""
-        screen = self.screen().geometry()
-        x = (screen.width() - self.width()) // 2
-        y = (screen.height() - self.height()) // 2
-        self.move(x, y)
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())

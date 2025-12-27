@@ -3,7 +3,7 @@
 开发者工具箱
 """
 import sys
-from PySide6.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication
 from qfluentwidgets import setTheme, Theme
 from app.views.main_window import MainWindow
 
@@ -15,7 +15,7 @@ def main():
     window = MainWindow()
     window.show()
     
-    sys.exit(app.exec())
+    sys.exit(app.exec_())
 
 
 if __name__ == "__main__":
