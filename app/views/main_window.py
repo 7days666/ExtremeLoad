@@ -23,6 +23,8 @@ from .network_page import NetworkPage
 from .textdiff_page import TextDiffPage
 from .sysinfo_page import SysInfoPage
 from .settings_page import SettingsPage
+from .json_yaml_page import JsonYamlPage
+from .timestamp_page import TimestampPage
 
 
 class MainWindow(FluentWindow):
@@ -100,6 +102,14 @@ class MainWindow(FluentWindow):
         # 编码转换
         self.encode_page = EncodePage(self)
         self.addSubInterface(self.encode_page, FIF.LANGUAGE, "编码转换")
+        
+        # JSON/YAML 工具
+        self.json_yaml_page = JsonYamlPage(self)
+        self.addSubInterface(self.json_yaml_page, FIF.DOCUMENT, "JSON/YAML")
+        
+        # 时间戳工具
+        self.timestamp_page = TimestampPage(self)
+        self.addSubInterface(self.timestamp_page, FIF.HISTORY, "时间戳")
         
         # 二维码
         self.qrcode_page = QRCodePage(self)
