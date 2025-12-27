@@ -12,7 +12,7 @@ class MainWindow(FluentWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("极限负载 / ExtremeLoad")
-        self.resize(1000, 700)
+        self.resize(1200, 800)
         
         self._init_navigation()
         self._center_window()
