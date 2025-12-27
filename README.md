@@ -21,6 +21,17 @@
 - Docker Desktop - 容器化
 - Notepad++、7-Zip、Everything、Snipaste
 
+### 🔍 逆向工具
+免费开源的逆向工程工具：
+- Cheat Engine - 内存扫描修改
+- x64dbg - 开源调试器
+- Ghidra - NSA 逆向框架
+- dnSpy - .NET 反编译
+- Detect It Easy - 查壳工具
+- PE-bear - PE 分析
+- Process Hacker - 进程管理
+- API Monitor - API 监控
+
 ### 📚 运行库下载
 - Visual C++ 运行库 (2005-2022, x86/x64)
 - .NET Framework (4.0/4.5/4.8)

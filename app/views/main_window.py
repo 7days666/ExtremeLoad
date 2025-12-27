@@ -6,6 +6,7 @@ from .download_page import DownloadPage
 from .runtime_page import RuntimePage
 from .ai_ide_page import AIIDEPage
 from .tools_page import ToolsPage
+from .reverse_page import ReversePage
 from .env_config_page import EnvConfigPage
 from .mirror_page import MirrorPage
 from .git_config_page import GitConfigPage
@@ -36,6 +37,10 @@ class MainWindow(FluentWindow):
         # 常用工具下载页
         self.tools_page = ToolsPage(self)
         self.addSubInterface(self.tools_page, FIF.APPLICATION, "常用工具")
+        
+        # 逆向工具下载页
+        self.reverse_page = ReversePage(self)
+        self.addSubInterface(self.reverse_page, FIF.DEVELOPER_TOOLS, "逆向工具")
         
         # 运行库下载页
         self.runtime_page = RuntimePage(self)
