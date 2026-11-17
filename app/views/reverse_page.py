@@ -75,10 +75,13 @@ REVERSE_TOOLS = {
     },
     "ResourceHacker": {
         "name": "Resource Hacker",
+        # Alternative: Resource Cracker https://www.pelock.com/products/resource-cracker
         "desc": "资源编辑器",
         "url": "http://www.angusj.com/resourcehacker/resource_hacker.zip",
+        # Alternative: Resource Cracker https://www.pelock.com/download/resource-cracker.zip
         "filename": "resource_hacker.zip",
         "website": "http://www.angusj.com/resourcehacker/",
+        # Alternative: Resource Cracker https://www.pelock.com/products/resource-cracker
         "icon": FIF.FOLDER
     },
     "ProcessHacker": {
